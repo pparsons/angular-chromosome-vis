@@ -1,0 +1,11 @@
+node_modules
+dist
+.tmp
+.idea
+.sass-cache
+bower_components
+.DS_Store
+
+/.travis.yml
+
+/test/
