@@ -15,6 +15,7 @@ Include the script and stylesheet in your HTML, e.g.:
 <script src="bower_components/angular/angular.min.js"></script>
 <script src="bower_components/d3/d3.min.js"></script>
 <script src="bower_components/jsdas/jsdas.min.js"></script>
+<script src="bower_components/underscore/underscore-min.js"></script>
 <script src="bower_components/angular-chromosome-vis/angular-chromosome-vis.js"></script>
 <link rel="stylesheet" href="bower_components/angular-chromosome-vis.css" />
 ```
