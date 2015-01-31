@@ -1,0 +1,31 @@
+{
+  "name": "angular-chromosome-vis",
+  "version": "0.1.0",
+  "authors": [
+    "Paul Parsons <paulparsons@gmail.com>"
+  ],
+  "description": "angular directive for chromosome visual representation",
+  "main": "angular-chromosome-vis.js",
+  "keywords": [
+    "chromosome",
+    "genetics",
+    "karytope",
+    "angularjs",
+    "javascript",
+    "directive"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {},
+  "dependencies": {
+    "d3": "~3.5.3",
+    "angular": "~1.3.11",
+    "jsdas": "~1.0.0"
+  }
+}
