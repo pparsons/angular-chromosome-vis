@@ -6,7 +6,7 @@ Interactive visual chromosome representation for [Angular.js](http://angularjs.o
 Include the angular-chromosome-vis dependency on your angular module:
 
 ```
-var app = angular.module("myApp", ["angular-chromosome-vis"]);
+var app = angular.module("myApp", ["angularChromosomeVis"]);
 ```
 
 Include the script and stylesheet in your HTML, e.g.:
