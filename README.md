@@ -9,11 +9,13 @@ Include the angular-chromosome-vis dependency on your angular module:
 
 Include the script and stylesheet in your HTML, e.g.:
 
-`<script src="bower_components/angular/angular.min.js"></script>
+```
+<script src="bower_components/angular/angular.min.js"></script>
 <script src="bower_components/d3/d3.min.js"></script>
 <script src="bower_components/jsdas/jsdas.min.js"></script>
 <script src="bower_components/angular-chromosome-vis/angular-chromosome-vis.js"></script>
-<link rel="stylesheet" href="bower_components/angular-chromosome-vis.css" />`
+<link rel="stylesheet" href="bower_components/angular-chromosome-vis.css" />
+```
 
 Add the directive to your HTML, e.g.:
 
