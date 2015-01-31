@@ -28,6 +28,7 @@
   "dependencies": {
     "d3": "~3.5.3",
     "angular": ">=1.2.0",
-    "jsdas": "~1.0.2"
+    "jsdas": "~1.0.2",
+    "underscore": "~1.7.0"
   }
 }
