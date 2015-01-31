@@ -5,11 +5,13 @@ chromosome visual representation for angular
 ##How to use
 Include the angular-chromosome-vis dependency on your angular module:
 
-`var app = angular.module("myApp", ["angular-chromosome-vis"]);`
+```html
+var app = angular.module("myApp", ["angular-chromosome-vis"]);
+```
 
 Include the script and stylesheet in your HTML, e.g.:
 
-```
+```html
 <script src="bower_components/angular/angular.min.js"></script>
 <script src="bower_components/d3/d3.min.js"></script>
 <script src="bower_components/jsdas/jsdas.min.js"></script>
@@ -19,4 +21,6 @@ Include the script and stylesheet in your HTML, e.g.:
 
 Add the directive to your HTML, e.g.:
 
-`<div chromosome chr="1" rel-size="true" axis="true" assembly="37" width='850' height="20" mode="multi"></div>`
+```html
+<div chromosome chr="1" rel-size="true" axis="true" assembly="37" width='850' height="20" mode="multi"></div>
+```
