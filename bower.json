@@ -27,7 +27,7 @@
   "devDependencies": {},
   "dependencies": {
     "d3": "~3.5.3",
-    "angular": "~1.3.11",
+    "angular": ">=1.2.0",
     "jsdas": "~1.0.2"
   }
 }
