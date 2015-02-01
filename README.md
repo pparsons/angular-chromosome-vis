@@ -2,7 +2,7 @@
 
 Interactive visual chromosome representation for [Angular.js](http://angularjs.org/) 
 
-##How to use
+##Brief Description
 Include the angular-chromosome-vis dependency on your angular module:
 
 ```
@@ -25,3 +25,6 @@ Add the directive to your HTML, e.g.:
 ```html
 <div chromosome chr="1" rel-size="true" axis="true" assembly="37" width='850' height="20" mode="multi"></div>
 ```
+
+##Documentation and Demos
+pparsons.github.io/angular-chromosome-vis
