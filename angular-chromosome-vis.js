@@ -120,6 +120,10 @@
 								.attr('x', (xscale(m.START.textContent)));
 						});
 
+						band.on("mouseout", function (m) {
+							label.text(''); //empty the label
+						});
+
 						band.on("click", function (m) {
 							var start = +m.START.textContent,
 								end = +m.END.textContent;
