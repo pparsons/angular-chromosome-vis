@@ -1,0 +1,1 @@
+"use strict";angular.module("angularChromosomeVisApp",["angularChromosomeVis"]),angular.module("angularChromosomeVisApp").controller("MainCtrl",["$scope","chrSelectors","$timeout",function(a,b,c){a.selectors=b.getSelectors(),a.deleteAllSelectors=function(){b.deleteAll()},a.$on("selectors:updated",function(){c(function(){a.selectors=b.getSelectors()})})}]);
