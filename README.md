@@ -28,3 +28,6 @@ Add the directive to your HTML, e.g.:
 
 ##Documentation and Demos
 [pparsons.github.io/angular-chromosome-vis](http://pparsons.github.io/angular-chromosome-vis)
+
+---
+Based on [linjoey/cyto-chromosome](https://github.com/linjoey/cyto-chromosome) and [4ndr01d3/biojs-vis-chromosome](https://github.com/4ndr01d3/biojs-vis-chromosome)
