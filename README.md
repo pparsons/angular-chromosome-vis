@@ -27,4 +27,4 @@ Add the directive to your HTML, e.g.:
 ```
 
 ##Documentation and Demos
-pparsons.github.io/angular-chromosome-vis
+[Github page](pparsons.github.io/angular-chromosome-vis)
