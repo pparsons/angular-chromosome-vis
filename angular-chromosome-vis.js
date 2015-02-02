@@ -53,7 +53,6 @@
 
 			var CHR1_BP_END = 248956422,
 				STALK_MAG_PC = 0.8,
-				PADDING_TOP = 60,
 				PADDING = 30,
 				LABEL_PADDING = 24,
 				AXIS_SPACING = 4,
@@ -61,8 +60,13 @@
 
 			var target = d3.select(element[0]).append('svg');
 			target.attr('id', scope.id + 'svg'); //take id from the scope
-			target.attr({width: '100%', height: scope.height + (2 * PADDING_TOP)});
+			target.attr({width: '100%'});
 
+			if (scope.axis) {
+				target.attr({height: scope.height + (2 * PADDING)});
+			} else {
+				target.attr({height: scope.height + PADDING});
+			}
 			dasLoader.loadModel(scope.chr, scope.assembly)
 				.features({segment: scope.chr}, function (res) {
 					//success response
