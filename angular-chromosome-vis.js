@@ -49,19 +49,19 @@
 		function link(scope, element, attr) {
 
 			var dasModel;
-			var xscale;
 			scope.selectors = { list: [] }; //holds selector objects
 
 			var CHR1_BP_END = 248956422,
 				STALK_MAG_PC = 0.8,
+				PADDING_TOP = 60,
 				PADDING = 30,
 				LABEL_PADDING = 24,
 				AXIS_SPACING = 4,
 				STALK_SPACING = 3;
 
 			var target = d3.select(element[0]).append('svg');
-			target.attr('id', 'chrVis' + scope.chr); //add a unique id to the svg element
-			target.attr({width: scope.width, height: scope.height + (2 * PADDING)});
+			target.attr('id', 'chrVis' + scope.chr); //add a unique id to the svg element TODO fix this
+			target.attr({width: '100%', height: scope.height + (2 * PADDING_TOP)});
 
 			dasLoader.loadModel(scope.chr, scope.assembly)
 				.features({segment: scope.chr}, function (res) {
@@ -79,11 +79,18 @@
 
 
 					if (typeof dasModel.err === 'undefined') {
-						var rangeTo = scope.relSize
-							? ((+dasModel.stop / CHR1_BP_END) * scope.width) - PADDING
-							: scope.width - PADDING;
 
-						xscale = d3.scale.linear()
+						var rangeTo;
+
+						if (scope.width === 'inherit') {
+							var svgWidth = target[0][0].width.baseVal.value;
+							rangeTo = scope.relSize ? ((+dasModel.stop / CHR1_BP_END) * svgWidth) - PADDING : svgWidth - PADDING;
+						}
+						else {
+							rangeTo = scope.relSize ? ((+dasModel.stop / CHR1_BP_END) * scope.width) - PADDING : scope.width - PADDING;
+						}
+
+						var xscale = d3.scale.linear()
 							.domain([dasModel.start, dasModel.stop])
 							.range([0, rangeTo]);
 
@@ -274,7 +281,7 @@
 				chr: '@',
 				relSize: '=',
 				assembly: '=',
-				width: '=',
+				width: '@',
 				height: '=',
 				axis: '=',
 				mode: '@'
