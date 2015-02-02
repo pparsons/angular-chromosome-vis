@@ -60,7 +60,7 @@
 				STALK_SPACING = 3;
 
 			var target = d3.select(element[0]).append('svg');
-			target.attr('id', 'chrVis' + scope.chr); //add a unique id to the svg element TODO fix this
+			target.attr('id', scope.id + 'svg'); //take id from the scope
 			target.attr({width: '100%', height: scope.height + (2 * PADDING_TOP)});
 
 			dasLoader.loadModel(scope.chr, scope.assembly)
@@ -184,12 +184,11 @@
 			}
 
 			function newSelector(scope, xscale, start, end, yshift) {
-				var target = '#chrVis' + scope.chr; //id of the relevant svg element
 				return new Selector({
 					scope: scope,
 					xscale: xscale,
 					y: yshift,
-					target: target
+					target: '#' + scope.id + 'svg'
 				}).init(start, end);
 			};
 		}
@@ -284,7 +283,8 @@
 				width: '@',
 				height: '=',
 				axis: '=',
-				mode: '@'
+				mode: '@',
+				id: '@'
 			}
 		}
 	}]);
