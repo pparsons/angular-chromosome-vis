@@ -48,6 +48,13 @@
 
 		function link(scope, element, attr) {
 
+			//set default scope values if not provided
+			scope.relSize = angular.isDefined(scope.relSize) ? scope.relSize : true;
+			scope.assembly = angular.isDefined(scope.assembly) ? scope.assembly : 37;
+			scope.height = angular.isDefined(scope.height) ? scope.height : 20;
+			scope.axis = angular.isDefined(scope.axis) ? scope.axis : true;
+			scope.mode = angular.isDefined(scope.mode) ? scope.mode : "multi";
+
 			var dasModel;
 			scope.selectors = { list: [] }; //holds selector objects
 
@@ -282,11 +289,11 @@
 			restrict: 'AE',
 			scope: {
 				chr: '@',
-				relSize: '=',
-				assembly: '=',
+				relSize: '=?',
+				assembly: '=?',
 				width: '@',
-				height: '=',
-				axis: '=',
+				height: '=?',
+				axis: '=?',
 				mode: '@',
 				id: '@'
 			}
