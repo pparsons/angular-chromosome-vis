@@ -36,6 +36,12 @@
 				selectors = _.without(selectors, selector);
 				$rootScope.$broadcast('selectors:updated', selectors); //notify listeners and provide the new selectors array
 			},
+			deleteChrSelectors: function (chr) {
+				selectors = _.reject(selectors, function(sel) {
+					return sel.chr == chr;
+				});
+				$rootScope.$broadcast('selectors:updated', selectors);
+			},
 			deleteAll: function () {
 				selectors = [];
 				$rootScope.$broadcast('selectors:updated', selectors); //notify listeners and provide the new selectors array
