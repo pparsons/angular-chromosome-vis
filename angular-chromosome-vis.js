@@ -243,22 +243,50 @@
 
 			//initialize the selector
 			this.init = function (start, end) {
+				var brushStart;
+				var brushEnd;
+
 				self.brush = d3.svg.brush()
 					.x(options.xscale)
 					.extent([start, end]);
 
 				self.start = Math.round(start);
 				self.end = Math.round(end);
+				self.chr = options.scope.chr;
+				self.selected = false;
 
 				self.brush.on("brush", function () {
 					triggerSelectionChange();
 					options.scope.$apply();
 				});
 
+				self.brush.on("brushstart", function () {
+					var ext = self.brush.extent();
+					brushStart = ext[0];
+					brushEnd = ext[1];
+				});
+
 				//uncomment to use
-				//self.brush.on("brushend", function () {
-				//	//do something here on brush end
-				//});
+				self.brush.on("brushend", function () {
+					var ext = self.brush.extent();
+					var newStart = ext[0];
+					var newEnd = ext[1];
+
+					//if there was no movement--i.e., just a click
+					if (brushStart === newStart && brushEnd === newEnd) {
+						self.selected = !self.selected;
+						if (_selector.classed('selector')) {
+							_selector.classed('selector', false);
+							_selector.classed('selected', true);
+						}
+						else {
+							_selector.classed('selector', true);
+							_selector.classed('selected', false);
+						}
+						options.scope.$apply();
+
+					}
+				});
 
 				_selector = d3.select(options.target).append("g")
 					.classed('selector', true)
