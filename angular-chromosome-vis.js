@@ -310,7 +310,13 @@
 
 			this.move = function (to, from) {
 				self.brush.extent([to, from]);
-				var selector = d3.select(options.target + ' .selector');
+				var selector;
+				if (self.selected === true) {
+					selector = d3.select(options.target + ' .selected');
+				}
+				else {
+					selector = d3.select(options.target + ' .selector');
+				}
 				selector.call(self.brush);
 				return self;
 			};
