@@ -1,61 +1,61 @@
 
 .band:hover
 {
-    opacity: 0.6;
-    cursor: pointer;
+	opacity: 0.6;
+	cursor: pointer;
 }
 
 .band {
-    stroke: #d9d9d9;
-    stroke-width: 1;
+	stroke: #d9d9d9;
+	stroke-width: 1;
 }
 
 .acen {
-    fill:#708090;
+	fill:#708090;
 }
 
 .gneg {
-    fill: #ffffff;
+	fill: #ffffff;
 }
 
 .gneg:hover {
-    fill: #d9d9d9;
+	fill: #d9d9d9;
 }
 
 .gpos, .gpos100, .tip  {
-    fill: #000000;
+	fill: #000000;
 }
 
 .gpos25 {
-    fill: #d9d9d9;
+	fill: #d9d9d9;
 }
 
 .gpos33 {
-    fill: #bfbfbf;
+	fill: #bfbfbf;
 }
 
 .gpos50 {
-    fill:#999999;
+	fill:#999999;
 }
 
 .gpos66 {
-    fill: #7f7f7f;
+	fill: #7f7f7f;
 }
 
 .gpos75 {
-    fill: #666666;
+	fill: #666666;
 }
 
 .gvar {
-    fill: #e0e0e0;
+	fill: #e0e0e0;
 }
 
 .mark {
-    fill: #0000ff;
+	fill: #0000ff;
 }
 
 .stalk {
-    fill: #708090;
+	fill: #708090;
 }
 
 /**
@@ -63,26 +63,33 @@
 */
 
 .bp-axis text {
-    font: 10px sans-serif;
+	font: 10px sans-serif;
 }
 
 .bp-axis path,
 .bp-axis line {
-    fill: none;
-    stroke: #666666;
-    shape-rendering: crispEdges;
+	fill: none;
+	stroke: #666666;
+	shape-rendering: crispEdges;
 }
 
 
 .band-lbl {
-    font: 12px sans-serif;
+	font: 12px sans-serif;
 
 }
 
 .selector rect{
-    fill: #0000ff;
-    fill-opacity: 0.2;
-    stroke: #666666;
-    stroke-width: 0.5;
+	fill: #0000ff;
+	fill-opacity: 0.2;
+	stroke: #666666;
+	stroke-width: 0.5;
 
+}
+
+.selected rect{
+	fill: #5eba5b;
+	fill-opacity: 0.2;
+	stroke: #666666;
+	stroke-width: 0.5;
 }
