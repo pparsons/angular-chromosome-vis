@@ -173,8 +173,7 @@
 					}
 
 				}, function (err) {
-					//error response handler
-					console.log("Error from DAS loader: " + err);
+					target.append("text").attr("y", 30).text("Error retrieving data model for chromosome " + scope.chr + ". Message from server: " + err.id + ", " + err.msg);
 				});
 
 			function addSelector(sel) {
