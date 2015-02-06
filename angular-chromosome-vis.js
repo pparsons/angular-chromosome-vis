@@ -64,6 +64,15 @@
 			var dasModel;
 			scope.selectors = { list: [] }; //holds selector objects
 
+			scope.selectorsSelected = function() {
+				var sel = false;
+				angular.forEach(scope.selectors.list, function(val, key) {
+					if (val.selected === true)
+						sel = true;
+				});
+				return sel;
+			}
+
 			var CHR1_BP_END = 248956422,
 				STALK_MAG_PC = 0.8,
 				PADDING = 30,
