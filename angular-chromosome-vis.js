@@ -109,7 +109,7 @@
 						var rangeTo;
 
 						if (scope.width === 'inherit') {
-							var svgWidth = target[0][0].width.baseVal.value;
+							var svgWidth = target[0][0].getBoundingClientRect().width;
 							rangeTo = scope.relSize ? ((+dasModel.stop / CHR1_BP_END) * svgWidth) - PADDING : svgWidth - PADDING;
 						}
 						else {
