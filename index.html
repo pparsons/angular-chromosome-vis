@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html ng-app="demoApp">
 <head>
-    <title>chromosome demo</title>
+    <title>angular-chromosome-vis demo</title>
 
     <link rel="stylesheet" href="angular-chromosome-vis.css" />
 </head>
 
-
 <body ng-controller="MainCtrl">
 
-<div chromosome chr="13" rel-size="false" axis="true" assembly="37" width='900' height="20" mode="single"></div>
+<div chromosome chr="13" rel-size="false" axis="true" assembly="37" width='900' height="20" mode="single" centromere="line"></div>
 
-<chromosome chr="1" rel-size="false" axis="true" assembly="37" width='900' height="20" mode="single"></chromosome>
+<chromosome chr="1" rel-size="false" axis="true" assembly="37" width='900' height="20" mode="single" centromere="dot"></chromosome>
 
 <!-- JS Script Dependencies -->
 <script src="bower_components/angular/angular.min.js"></script>
@@ -22,13 +21,9 @@
 <script src="bower_components/jsdas/jsdas.min.js"></script>
 
 <script>
-
     var demoApp = angular.module('demoApp', ['angularChromosomeVis']);
 
-    demoApp.controller('MainCtrl', ['$scope', function(sc) {
-
-    }]);
-
+    demoApp.controller('MainCtrl', ['$scope', function() {}]);
 
 </script>
 </body>

@@ -60,6 +60,7 @@
 			scope.height = angular.isDefined(scope.height) ? scope.height : 20;
 			scope.axis = angular.isDefined(scope.axis) ? scope.axis : true;
 			scope.mode = angular.isDefined(scope.mode) ? scope.mode : "multi";
+			scope.centromere = angular.isDefined(scope.centromere) ? scope.centromere : "line";
 
 			var dasModel;
 			scope.selectors = { list: [] }; //holds selector objects
@@ -151,21 +152,26 @@
 								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : PADDING;
 							});
 
-                        // Centromere line option
-                        //target.append('line')
-                        //    .style('stroke', 'red')
-                        //    .style('stroke-width', 2)
-                        //    .attr('x1', xscale(centromereLocation))
-                        //    .attr('y1', PADDING)
-                        //    .attr('x2', xscale(centromereLocation))
-                        //    .attr('y2', PADDING + scope.height);
+						//centromere options
+						if (scope.centromere === 'line') {
+							// Centromere line option
+							target.append('line')
+								.style('stroke', 'red')
+								.style('stroke-width', 2)
+								.attr('x1', xscale(centromereLocation))
+								.attr('y1', PADDING)
+								.attr('x2', xscale(centromereLocation))
+								.attr('y2', PADDING + scope.height);
+						}
 
-                        //centromere dot option
-                        target.append('circle')
-                            .classed('centromere', true)
-                            .attr('cx', xscale(centromereLocation))
-                            .attr('cy', PADDING - 6)
-                            .attr('r', 5);
+						else if (scope.centromere === 'dot') {
+							//centromere dot option
+							target.append('circle')
+							    .classed('centromere', true)
+							    .attr('cx', xscale(centromereLocation))
+							    .attr('cy', PADDING - 6)
+							    .attr('r', 5);
+						}
 
 						var label = target.append("text")
 							.attr("class", "band-lbl")
@@ -366,7 +372,8 @@
 				height: '=?',
 				axis: '=?',
 				mode: '@',
-				id: '@'
+				id: '@',
+				centromere: '@'
 			}
 		}
 	}]);
