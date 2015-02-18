@@ -1,8 +1,9 @@
 {
   "name": "angular-chromosome-vis",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "authors": [
-    "Paul Parsons <paulparsons@gmail.com>"
+    "Paul Parsons <paulparsons@gmail.com>",
+    "Joe Lin <linjoeyy@gmail.com"
   ],
   "description": "angular directive for interactive visual chromosome representation",
   "homepage": "http://pparsons.github.io/angular-chromosome-vis/",
