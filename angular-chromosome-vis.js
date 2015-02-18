@@ -127,8 +127,15 @@
 						band.append("title")
 							.text(function(m) {return m.id; });
 
+                        var centromereLocation;
 						band.append('rect')
 							.attr('class', function (m) {
+
+                                //Calculate centromere location
+                                if(m.TYPE.id === "band:acen" && (m.id.indexOf('p')==0)) {
+                                    centromereLocation = m.END.textContent;
+                                }
+
 								return m.TYPE.id.replace(':', ' ');
 							})
 							.attr('height', function (m) {
@@ -143,6 +150,22 @@
 							.attr('y', function (m) {
 								return (m.TYPE.id === "band:stalk") ? (PADDING + STALK_SPACING) : PADDING;
 							});
+
+                        // Centromere line option
+                        //target.append('line')
+                        //    .style('stroke', 'red')
+                        //    .style('stroke-width', 2)
+                        //    .attr('x1', xscale(centromereLocation))
+                        //    .attr('y1', PADDING)
+                        //    .attr('x2', xscale(centromereLocation))
+                        //    .attr('y2', PADDING + scope.height);
+
+                        //centromere dot option
+                        target.append('circle')
+                            .classed('centromere', true)
+                            .attr('cx', xscale(centromereLocation))
+                            .attr('cy', PADDING - 6)
+                            .attr('r', 5);
 
 						var label = target.append("text")
 							.attr("class", "band-lbl")
