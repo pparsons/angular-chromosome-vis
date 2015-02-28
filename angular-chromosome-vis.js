@@ -52,6 +52,54 @@
 
 	angularChromosomeVis.directive('chromosome', ['dasLoader', 'chrSelectors', function(dasLoader, chrSelectors) {
 
+        function chrAPI ($scope) {
+
+            this.getActiveSelection = function () {
+                return {
+                    dasModel: $scope.dasModel,
+                    getSelectedBands: function() {
+                        var sel = $scope.activeSelector;
+                        this.selStart = sel.start;
+                        this.selEnd = sel.end;
+
+                        var selectedBands = [];
+
+                        if (typeof this.dasModel!== 'undefined' && !_.isEmpty(this.dasModel)) {
+                            for (var i = 0; i < this.dasModel.bands.length; ++i) {
+                                var band = this.dasModel.bands[i];
+
+                                var bStart = +band.START.textContent;
+                                var bEnd = +band.END.textContent;
+
+                                if ((this.selStart >= bStart && this.selStart < bEnd) ||
+                                    (this.selEnd > bStart && this.selEnd <= bEnd) ||
+                                    (this.selStart <= bStart && this.selEnd >= bEnd)) {
+
+                                    selectedBands.push({
+                                        start: bStart,
+                                        end: bEnd,
+                                        id: band.id,
+                                        type: band.TYPE.id
+                                    });
+                                }
+                            }
+                        }
+
+                        return selectedBands;
+                    }
+                };
+            }
+
+            this.getAttrs = function () {
+                return {
+                    chr: $scope.chr,
+                    width: $scope.width
+                }
+            }
+
+
+        };
+
 		function link(scope, element, attr) {
 
 			//set default scope values if not provided
@@ -62,8 +110,10 @@
 			scope.mode = angular.isDefined(scope.mode) ? scope.mode : "multi";
 			scope.centromere = angular.isDefined(scope.centromere) ? scope.centromere : "line";
 
+
 			var dasModel;
 			scope.selectors = { list: [] }; //holds selector objects
+            scope.activeSelector = {}; //currently selected selector
 
 			scope.selectorsSelected = function() {
 				var sel = false;
@@ -81,7 +131,7 @@
 				AXIS_SPACING = 4,
 				STALK_SPACING = 3;
 
-			var target = d3.select(element[0]).append('svg');
+			var target = d3.select(element[0]).select('.chromosome').append('svg');
 			target.attr('id', scope.id + 'svg'); //take id from the scope
 			target.attr({width: '100%'});
 
@@ -107,14 +157,16 @@
 
 					if (typeof dasModel.err === 'undefined') {
 
+                        scope.dasModel = dasModel;
+
 						var rangeTo;
 
 						if (scope.width === 'inherit') {
 							var svgWidth = target[0][0].getBoundingClientRect().width;
-							rangeTo = scope.relSize ? ((+dasModel.stop / CHR1_BP_END) * svgWidth) - PADDING : svgWidth - PADDING;
+							rangeTo = scope.relSize ? ((+dasModel.stop / CHR1_BP_END) * svgWidth) : svgWidth;
 						}
 						else {
-							rangeTo = scope.relSize ? ((+dasModel.stop / CHR1_BP_END) * scope.width) - PADDING : scope.width - PADDING;
+							rangeTo = scope.relSize ? ((+dasModel.stop / CHR1_BP_END) * scope.width)  : scope.width;
 						}
 
 						var xscale = d3.scale.linear()
@@ -312,6 +364,8 @@
 
 					//if there was no movement--i.e., just a click
 					if (brushStart === newStart && brushEnd === newEnd) {
+
+                        options.scope.activeSelector = self;
 						self.selected = !self.selected;
 						if (_selector.classed('selector')) {
 							_selector.classed('selector', false);
@@ -363,7 +417,10 @@
 
 		return {
 			link: link,
+            controller: chrAPI,
 			restrict: 'AE',
+            transclude:true,
+            template:'<div class=\"chromosome\"></div><div ng-transclude></div>',
 			scope: {
 				chr: '@',
 				relSize: '=?',
