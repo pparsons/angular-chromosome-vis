@@ -280,6 +280,8 @@
 							}
 						});
 
+						drawSelectorMap();
+
 						if (scope.axis) {
 							var bpAxis = d3.svg.axis()
 								.scale(xscale)
@@ -294,48 +296,51 @@
 					}
 
 
-                    /**
-                     * Draw selector mapping to geneview directive
-                     */
-                    if (scope.geneviewMap) {
-                        var gvmapContainer = target.append('g')
-                            .classed('geneview-map', true)
-                            .attr('transform', 'translate(0,' + (scope.height + PADDING + AXIS_SPACING) + ")");
+                    function drawSelectorMap() {
+                        /**
+                         * Draw selector mapping to geneview directive
+                         */
+                        if (scope.geneviewMap) {
+                            var gvmapContainer = target.append('g')
+                                .classed('geneview-map', true)
+                                .attr('transform', 'translate(0,' + (scope.height + PADDING + AXIS_SPACING) + ")");
 
-                        var gvpoly = gvmapContainer.append('polygon');
+                            var gvpoly = gvmapContainer.append('polygon');
 
-                        var gvScale = d3.scale.linear()
-                            .range([0, scope.width]);
+                            var gvScale = d3.scale.linear()
+                                .range([0, scope.width]);
 
-                        scope.$on("selector:activated", function(e, arg) {
-                            var sensitivity = getSensitivityValue(arg.start, arg.end);
+                            scope.$on("selector:activated", function(e, arg) {
+                                var sensitivity = getSensitivityValue(arg.start, arg.end);
 
-                            gvScale.domain([arg.start, arg.end]);
+                                gvScale.domain([arg.start, arg.end]);
 
-                            var p1x = xscale(arg.end),
-                                p1y = 0,
+                                var p1x = xscale(arg.end),
+                                    p1y = 0,
 
-                                p2x = xscale(arg.start),
-                                p2y = 0,
+                                    p2x = xscale(arg.start),
+                                    p2y = 0,
 
-                                p3x = gvScale(arg.start + sensitivity),
-                                p3y = LABEL_PADDING + 2,
+                                    p3x = gvScale(arg.start + sensitivity),
+                                    p3y = LABEL_PADDING + 2,
 
-                                p4x = gvScale(arg.end - sensitivity),
-                                p4y = LABEL_PADDING + 2;
+                                    p4x = gvScale(arg.end - sensitivity),
+                                    p4y = LABEL_PADDING + 2;
 
-                            //console.log("[",p1x, p1y,"]","[", p2x, p2y ,"]", "[",p3x, p3y,"]", "[",p4x, p4y,"]");
+                                //console.log("[",p1x, p1y,"]","[", p2x, p2y ,"]", "[",p3x, p3y,"]", "[",p4x, p4y,"]");
 
-                            gvpoly.attr('points', p1x + "," + p1y + " " + p2x + "," + p2y + " " + p3x + "," + p3y + " " + p4x + "," + p4y)
-                                .style({
-                                    "fill": "#7f7f7f",
-                                    "opacity": 0.4,
-                                    "stroke": "black",
-                                    "stroke-width" : 1
-                                });
+                                gvpoly.attr('points', p1x + "," + p1y + " " + p2x + "," + p2y + " " + p3x + "," + p3y + " " + p4x + "," + p4y)
+                                    .style({
+                                        "fill": "#7f7f7f",
+                                        "opacity": 0.4,
+                                        "stroke": "black",
+                                        "stroke-width" : 1
+                                    });
 
 
-                        });
+                            });
+                        }
+
                     }
 				}, function (err) {
 					target.append("text").attr("y", 30).text("Error retrieving data model for chromosome " + scope.chr + ". Message from server: " + err.id + ", " + err.msg);
