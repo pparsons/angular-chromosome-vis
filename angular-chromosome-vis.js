@@ -479,8 +479,8 @@
 
 			this.draw = function () {
 				if (!_initialized) self.init();
-				_selector.select('.background').remove();
 				_selector.call(self.brush);
+                _selector.select('.background').remove();
 				return self;
 			};
 
