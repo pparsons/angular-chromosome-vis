@@ -52,57 +52,6 @@
 
 	angularChromosomeVis.directive('chromosome', ['dasLoader', 'chrSelectors', function(dasLoader, chrSelectors) {
 
-		//function chrAPI ($scope) {
-		//
-		//	this.addChild = function(mes) {
-		//		console.log(mes);
-		//	}
-		//
-		//	this.getActiveSelection = function () {
-		//		return {
-		//			dasModel: $scope.dasModel,
-		//			getSelectedBands: function() {
-		//				var sel = $scope.activeSelector;
-		//				this.selStart = sel.start;
-		//				this.selEnd = sel.end;
-		//
-		//				var selectedBands = [];
-		//
-		//				if (typeof this.dasModel!== 'undefined' && !_.isEmpty(this.dasModel)) {
-		//					for (var i = 0; i < this.dasModel.bands.length; ++i) {
-		//						var band = this.dasModel.bands[i];
-		//
-		//						var bStart = +band.START.textContent;
-		//						var bEnd = +band.END.textContent;
-		//
-		//						if ((this.selStart >= bStart && this.selStart < bEnd) ||
-		//							(this.selEnd > bStart && this.selEnd <= bEnd) ||
-		//							(this.selStart <= bStart && this.selEnd >= bEnd)) {
-		//
-		//							selectedBands.push({
-		//								start: bStart,
-		//								end: bEnd,
-		//								id: band.id,
-		//								type: band.TYPE.id
-		//							});
-		//						}
-		//					}
-		//				}
-		//
-		//				return selectedBands;
-		//			}
-		//		};
-		//	}
-		//
-		//	this.getAttrs = function () {
-		//		return {
-		//			chr: $scope.chr,
-		//			width: $scope.width
-		//		}
-		//	}
-		//
-		//};
-
         /**
          * API to inject into dependee directives
          * @param $scope, directive scope
@@ -562,59 +511,7 @@
 
 		return {
 			link: link,
-			controller: function ($scope) {
-
-				this.addChild = function(mes) {
-					console.log(mes);
-				}
-
-				this.getActiveSelection = function () {
-					return {
-						dasModel: $scope.dasModel,
-						getSelectedBands: function() {
-							var sel = $scope.activeSelector;
-							this.selStart = sel.start;
-							this.selEnd = sel.end;
-
-							var selectedBands = [];
-
-							if (typeof this.dasModel!== 'undefined' && !_.isEmpty(this.dasModel)) {
-								for (var i = 0; i < this.dasModel.bands.length; ++i) {
-									var band = this.dasModel.bands[i];
-
-									var bStart = +band.START.textContent;
-									var bEnd = +band.END.textContent;
-
-									if ((this.selStart >= bStart && this.selStart < bEnd) ||
-										(this.selEnd > bStart && this.selEnd <= bEnd) ||
-										(this.selStart <= bStart && this.selEnd >= bEnd)) {
-
-										selectedBands.push({
-											start: bStart,
-											end: bEnd,
-											id: band.id,
-											type: band.TYPE.id
-										});
-									}
-								}
-							}
-
-							return selectedBands;
-						}
-					};
-				}
-
-				this.getAttrs = function () {
-					if ($scope.width === 'inherit') {
-						return {
-							chr: $scope.chr,
-							width: $scope.widthVal
-						}
-					}
-
-				}
-
-			},
+			controller: chrAPI,
 			restrict: 'AE',
 			transclude:true,
 			//template:'<div class=\"chromosome\"></div> <div ng-transclude></div>',
