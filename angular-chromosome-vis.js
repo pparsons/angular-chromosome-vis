@@ -52,8 +52,15 @@
 
 	angularChromosomeVis.directive('chromosome', ['dasLoader', 'chrSelectors', function(dasLoader, chrSelectors) {
 
+        /**
+         * API to inject into dependee directives
+         * @param $scope, directive scope
+         */
         function chrAPI ($scope) {
-
+            /**
+             * Return bands under the active selector
+             * @returns {{dasModel: *, getSelectedBands: Function}}
+             */
             this.getActiveSelection = function () {
                 return {
                     dasModel: $scope.dasModel,
@@ -61,6 +68,7 @@
                         var sel = $scope.activeSelector;
                         this.selStart = sel.start;
                         this.selEnd = sel.end;
+                        this.sensitivity = getSensitivityValue(sel.start, sel.end);
 
                         var selectedBands = [];
 
@@ -71,9 +79,12 @@
                                 var bStart = +band.START.textContent;
                                 var bEnd = +band.END.textContent;
 
-                                if ((this.selStart >= bStart && this.selStart < bEnd) ||
-                                    (this.selEnd > bStart && this.selEnd <= bEnd) ||
-                                    (this.selStart <= bStart && this.selEnd >= bEnd)) {
+                                var selStart = this.selStart - this.sensitivity;
+                                var selEnd = this.selEnd + this.sensitivity;
+
+                                if ((selStart >= bStart && selStart < bEnd) ||
+                                    (selEnd > bStart && selEnd <= bEnd) ||
+                                    (selStart <= bStart && selEnd >= bEnd)) {
 
                                     selectedBands.push({
                                         start: bStart,
@@ -85,9 +96,16 @@
                             }
                         }
 
-                        return selectedBands;
+                        return {
+                            bands: selectedBands,
+                            sensitivity: getSensitivityValue(sel.start, sel.end)
+                        };
                     }
                 };
+            }
+
+            this.getActiveSelector = function () {
+                return $scope.activeSelector;
             }
 
             this.getAttrs = function () {
@@ -96,9 +114,24 @@
                     width: $scope.width
                 }
             }
-
-
         };
+
+        /**
+         * Get sensitivity value to search on both directions
+         * Unit is base pairs, not width/pixels of svg
+         * @param start, selector start point
+         * @param end, selector end point
+         */
+        function getSensitivityValue(start, end) {
+
+            // Max value to search
+            var defaultMax = 1000000;
+
+            // Default % for one side
+            var s = (end - start) * 0.10;
+
+            return s > defaultMax ? defaultMax : s;
+        }
 
 		function link(scope, element, attr) {
 
@@ -109,12 +142,10 @@
 			scope.axis = angular.isDefined(scope.axis) ? scope.axis : true;
 			scope.mode = angular.isDefined(scope.mode) ? scope.mode : "multi";
 			scope.centromere = angular.isDefined(scope.centromere) ? scope.centromere : "line";
-
+            scope.geneviewMap = angular.isDefined(scope.geneviewMap) ? scope.geneviewMap : false;
 
 			var dasModel;
 			scope.selectors = { list: [] }; //holds selector objects
-            scope.activeSelector = {}; //currently selected selector
-
 			scope.selectorsSelected = function() {
 				var sel = false;
 				angular.forEach(scope.selectors.list, function(val, key) {
@@ -124,6 +155,8 @@
 				return sel;
 			}
 
+            scope.activeSelector = {}; //currently selected selector
+
 			var CHR1_BP_END = 248956422,
 				STALK_MAG_PC = 0.8,
 				PADDING = 30,
@@ -131,15 +164,15 @@
 				AXIS_SPACING = 4,
 				STALK_SPACING = 3;
 
-			var target = d3.select(element[0]).select('.chromosome').append('svg');
-			target.attr('id', scope.id + 'svg'); //take id from the scope
-			target.attr({width: '100%'});
+            var containerHeight = scope.axis ? scope.height + (2 * PADDING) : scope.height + PADDING;
 
-			if (scope.axis) {
-				target.attr({height: scope.height + (2 * PADDING)});
-			} else {
-				target.attr({height: scope.height + PADDING});
-			}
+			var target = d3.select(element[0]).select('.chromosome')
+                .style({"height": containerHeight + "px"})
+                .append('svg')
+                    .attr('id', scope.id + 'svg') //take id from the scope
+                    .attr({width: '100%'})
+                    .attr({height: containerHeight});
+
 			dasLoader.loadModel(scope.chr, scope.assembly)
 				.features({segment: scope.chr}, function (res) {
 					//success response
@@ -154,9 +187,7 @@
 						console.log("JSDAS results empty for segment");
 					}
 
-
 					if (typeof dasModel.err === 'undefined') {
-
                         scope.dasModel = dasModel;
 
 						var rangeTo;
@@ -249,6 +280,8 @@
 							}
 						});
 
+						drawSelectorMap();
+
 						if (scope.axis) {
 							var bpAxis = d3.svg.axis()
 								.scale(xscale)
@@ -262,6 +295,53 @@
 						}
 					}
 
+
+                    function drawSelectorMap() {
+                        /**
+                         * Draw selector mapping to geneview directive
+                         */
+                        if (scope.geneviewMap) {
+                            var gvmapContainer = target.append('g')
+                                .classed('geneview-map', true)
+                                .attr('transform', 'translate(0,' + (scope.height + PADDING + AXIS_SPACING) + ")");
+
+                            var gvpoly = gvmapContainer.append('polygon');
+
+                            var gvScale = d3.scale.linear()
+                                .range([0, scope.width]);
+
+                            scope.$on("selector:activated", function(e, arg) {
+                                var sensitivity = getSensitivityValue(arg.start, arg.end);
+
+                                gvScale.domain([arg.start, arg.end]);
+
+                                var p1x = xscale(arg.end),
+                                    p1y = 0,
+
+                                    p2x = xscale(arg.start),
+                                    p2y = 0,
+
+                                    p3x = gvScale(arg.start + sensitivity),
+                                    p3y = LABEL_PADDING + 2,
+
+                                    p4x = gvScale(arg.end - sensitivity),
+                                    p4y = LABEL_PADDING + 2;
+
+                                //console.log("[",p1x, p1y,"]","[", p2x, p2y ,"]", "[",p3x, p3y,"]", "[",p4x, p4y,"]");
+
+                                gvpoly.attr('points', p1x + "," + p1y + " " + p2x + "," + p2y + " " + p3x + "," + p3y + " " + p4x + "," + p4y)
+                                    .style({
+                                        "fill": "#7f7f7f",
+                                        "opacity": 0.4,
+                                        "stroke": "black",
+                                        "stroke-width" : 1
+                                    });
+
+
+                            });
+                        }
+
+                    }
 				}, function (err) {
 					target.append("text").attr("y", 30).text("Error retrieving data model for chromosome " + scope.chr + ". Message from server: " + err.id + ", " + err.msg);
 				});
@@ -297,6 +377,7 @@
 					target: '#' + scope.id + 'svg'
 				}).init(start, end);
 			};
+
 		}
 
 		/**
@@ -329,6 +410,8 @@
 				var ext = self.brush.extent();
 				self.start = Math.round(ext[0]);
 				self.end = Math.round(ext[1]);
+
+                if (self.selected) options.scope.$broadcast("selector:activated", self);
 			}
 
 			//initialize the selector
@@ -377,6 +460,8 @@
 						}
 						options.scope.$apply();
 
+                        if (self.selected) options.scope.$broadcast("selector:activated", self);
+
 					}
 				});
 
@@ -392,11 +477,10 @@
 				return self;
 			};
 
-
 			this.draw = function () {
 				if (!_initialized) self.init();
-				_selector.select('.background').remove();
 				_selector.call(self.brush);
+                _selector.select('.background').remove();
 				return self;
 			};
 
@@ -430,7 +514,8 @@
 				axis: '=?',
 				mode: '@',
 				id: '@',
-				centromere: '@'
+				centromere: '@',
+                geneviewMap: '=?'
 			}
 		}
 	}]);
