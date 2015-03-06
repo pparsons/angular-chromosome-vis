@@ -159,12 +159,21 @@
                 return $scope.activeSelector;
             }
 
-            this.getAttrs = function () {
-                return {
-                    chr: $scope.chr,
-                    width: $scope.width
-                }
-            }
+            //this.getAttrs = function () {
+            //    return {
+            //        chr: $scope.chr,
+            //        width: $scope.width
+            //    }
+            //}
+	        	this.getAttrs = function () {
+	        		if ($scope.width === 'inherit') {
+	        			return {
+	        				chr: $scope.chr,
+	        				width: $scope.widthVal
+	        			}
+	        		}
+
+	        	}
         };
 
         /**
