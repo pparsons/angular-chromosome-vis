@@ -52,53 +52,56 @@
 
 	angularChromosomeVis.directive('chromosome', ['dasLoader', 'chrSelectors', function(dasLoader, chrSelectors) {
 
-        function chrAPI ($scope) {
-
-            this.getActiveSelection = function () {
-                return {
-                    dasModel: $scope.dasModel,
-                    getSelectedBands: function() {
-                        var sel = $scope.activeSelector;
-                        this.selStart = sel.start;
-                        this.selEnd = sel.end;
-
-                        var selectedBands = [];
-
-                        if (typeof this.dasModel!== 'undefined' && !_.isEmpty(this.dasModel)) {
-                            for (var i = 0; i < this.dasModel.bands.length; ++i) {
-                                var band = this.dasModel.bands[i];
-
-                                var bStart = +band.START.textContent;
-                                var bEnd = +band.END.textContent;
-
-                                if ((this.selStart >= bStart && this.selStart < bEnd) ||
-                                    (this.selEnd > bStart && this.selEnd <= bEnd) ||
-                                    (this.selStart <= bStart && this.selEnd >= bEnd)) {
-
-                                    selectedBands.push({
-                                        start: bStart,
-                                        end: bEnd,
-                                        id: band.id,
-                                        type: band.TYPE.id
-                                    });
-                                }
-                            }
-                        }
-
-                        return selectedBands;
-                    }
-                };
-            }
-
-            this.getAttrs = function () {
-                return {
-                    chr: $scope.chr,
-                    width: $scope.width
-                }
-            }
-
-
-        };
+		//function chrAPI ($scope) {
+		//
+		//	this.addChild = function(mes) {
+		//		console.log(mes);
+		//	}
+		//
+		//	this.getActiveSelection = function () {
+		//		return {
+		//			dasModel: $scope.dasModel,
+		//			getSelectedBands: function() {
+		//				var sel = $scope.activeSelector;
+		//				this.selStart = sel.start;
+		//				this.selEnd = sel.end;
+		//
+		//				var selectedBands = [];
+		//
+		//				if (typeof this.dasModel!== 'undefined' && !_.isEmpty(this.dasModel)) {
+		//					for (var i = 0; i < this.dasModel.bands.length; ++i) {
+		//						var band = this.dasModel.bands[i];
+		//
+		//						var bStart = +band.START.textContent;
+		//						var bEnd = +band.END.textContent;
+		//
+		//						if ((this.selStart >= bStart && this.selStart < bEnd) ||
+		//							(this.selEnd > bStart && this.selEnd <= bEnd) ||
+		//							(this.selStart <= bStart && this.selEnd >= bEnd)) {
+		//
+		//							selectedBands.push({
+		//								start: bStart,
+		//								end: bEnd,
+		//								id: band.id,
+		//								type: band.TYPE.id
+		//							});
+		//						}
+		//					}
+		//				}
+		//
+		//				return selectedBands;
+		//			}
+		//		};
+		//	}
+		//
+		//	this.getAttrs = function () {
+		//		return {
+		//			chr: $scope.chr,
+		//			width: $scope.width
+		//		}
+		//	}
+		//
+		//};
 
 		function link(scope, element, attr) {
 
@@ -113,7 +116,7 @@
 
 			var dasModel;
 			scope.selectors = { list: [] }; //holds selector objects
-            scope.activeSelector = {}; //currently selected selector
+			scope.activeSelector = {}; //currently selected selector
 
 			scope.selectorsSelected = function() {
 				var sel = false;
@@ -157,12 +160,13 @@
 
 					if (typeof dasModel.err === 'undefined') {
 
-                        scope.dasModel = dasModel;
+						scope.dasModel = dasModel;
 
 						var rangeTo;
 
 						if (scope.width === 'inherit') {
 							var svgWidth = target[0][0].getBoundingClientRect().width;
+							scope.widthVal = svgWidth;
 							rangeTo = scope.relSize ? ((+dasModel.stop / CHR1_BP_END) * svgWidth) : svgWidth;
 						}
 						else {
@@ -180,14 +184,14 @@
 						band.append("title")
 							.text(function(m) {return m.id; });
 
-                        var centromereLocation;
+						var centromereLocation;
 						band.append('rect')
 							.attr('class', function (m) {
 
-                                //Calculate centromere location
-                                if(m.TYPE.id === "band:acen" && (m.id.indexOf('p')==0)) {
-                                    centromereLocation = m.END.textContent;
-                                }
+								//Calculate centromere location
+								if(m.TYPE.id === "band:acen" && (m.id.indexOf('p')==0)) {
+									centromereLocation = m.END.textContent;
+								}
 
 								return m.TYPE.id.replace(':', ' ');
 							})
@@ -219,10 +223,10 @@
 						else if (scope.centromere === 'dot') {
 							//centromere dot option
 							target.append('circle')
-							    .classed('centromere', true)
-							    .attr('cx', xscale(centromereLocation))
-							    .attr('cy', PADDING - 6)
-							    .attr('r', 5);
+								.classed('centromere', true)
+								.attr('cx', xscale(centromereLocation))
+								.attr('cy', PADDING - 6)
+								.attr('r', 5);
 						}
 
 						var label = target.append("text")
@@ -365,7 +369,7 @@
 					//if there was no movement--i.e., just a click
 					if (brushStart === newStart && brushEnd === newEnd) {
 
-                        options.scope.activeSelector = self;
+						options.scope.activeSelector = self;
 						self.selected = !self.selected;
 						if (_selector.classed('selector')) {
 							_selector.classed('selector', false);
@@ -417,10 +421,63 @@
 
 		return {
 			link: link,
-            controller: chrAPI,
+			controller: function ($scope) {
+
+				this.addChild = function(mes) {
+					console.log(mes);
+				}
+
+				this.getActiveSelection = function () {
+					return {
+						dasModel: $scope.dasModel,
+						getSelectedBands: function() {
+							var sel = $scope.activeSelector;
+							this.selStart = sel.start;
+							this.selEnd = sel.end;
+
+							var selectedBands = [];
+
+							if (typeof this.dasModel!== 'undefined' && !_.isEmpty(this.dasModel)) {
+								for (var i = 0; i < this.dasModel.bands.length; ++i) {
+									var band = this.dasModel.bands[i];
+
+									var bStart = +band.START.textContent;
+									var bEnd = +band.END.textContent;
+
+									if ((this.selStart >= bStart && this.selStart < bEnd) ||
+										(this.selEnd > bStart && this.selEnd <= bEnd) ||
+										(this.selStart <= bStart && this.selEnd >= bEnd)) {
+
+										selectedBands.push({
+											start: bStart,
+											end: bEnd,
+											id: band.id,
+											type: band.TYPE.id
+										});
+									}
+								}
+							}
+
+							return selectedBands;
+						}
+					};
+				}
+
+				this.getAttrs = function () {
+					if ($scope.width === 'inherit') {
+						return {
+							chr: $scope.chr,
+							width: $scope.widthVal
+						}
+					}
+
+				}
+
+			},
 			restrict: 'AE',
-            transclude:true,
-            template:'<div class=\"chromosome\"></div><div ng-transclude></div>',
+			transclude:true,
+			//template:'<div class=\"chromosome\"></div> <div ng-transclude></div>',
+			templateUrl: 'views/templates/chrTempl.html',
 			scope: {
 				chr: '@',
 				relSize: '=?',
