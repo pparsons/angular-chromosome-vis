@@ -336,7 +336,7 @@
 									p4x = gvScale(arg.end - sensitivity),
 									p4y = LABEL_PADDING + 2;
 
-								console.log("[",p1x, p1y,"]","[", p2x, p2y ,"]", "[",p3x, p3y,"]", "[",p4x, p4y,"]");
+								//console.log("[",p1x, p1y,"]","[", p2x, p2y ,"]", "[",p3x, p3y,"]", "[",p4x, p4y,"]");
 
 								gvpoly.attr('points', p1x + "," + p1y + " " + p2x + "," + p2y + " " + p3x + "," + p3y + " " + p4x + "," + p4y)
 									.style({
@@ -469,8 +469,16 @@
 						}
 						options.scope.$apply();
 
-						if (self.selected) options.scope.$broadcast("selector:activated", self);
+						if (self.selected) {
+							options.scope.$broadcast("selector:activated", self);
+							options.scope.$broadcast('selector:newLoc'); //will draw the geneview
+						}
 
+					}
+
+					//if there was movement
+					else {
+						options.scope.$broadcast('selector:newLoc'); //will redraw the geneview
 					}
 				});
 
