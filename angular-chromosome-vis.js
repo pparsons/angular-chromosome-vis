@@ -310,8 +310,14 @@
 
                             var gvpoly = gvmapContainer.append('polygon');
 
-                            var gvScale = d3.scale.linear()
-                                .range([0, +scope.width]);
+	                        //handle case of width being inherited from DOM parent
+	                        if (scope.width === 'inherit') {
+		                        var gvScale = d3.scale.linear()
+			                        .range([0, +scope.widthVal]);
+	                        } else {
+		                        var gvScale = d3.scale.linear()
+			                        .range([0, +scope.width]);
+	                        }
 
                             scope.$on("selector:activated", function(e, arg) {
                                 var sensitivity = Math.round(getSensitivityValue(arg.start, arg.end));
