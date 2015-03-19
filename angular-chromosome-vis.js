@@ -308,12 +308,13 @@
                             var gvpoly = gvmapContainer.append('polygon');
 
                             var gvScale = d3.scale.linear()
-                                .range([0, scope.width]);
+                                .range([0, +scope.width]);
 
                             scope.$on("selector:activated", function(e, arg) {
-                                var sensitivity = getSensitivityValue(arg.start, arg.end);
+                                var sensitivity = Math.round(getSensitivityValue(arg.start, arg.end));
 
-                                gvScale.domain([arg.start, arg.end]);
+                                //console.log(arg.end - arg.start, sensitivity);
+                                gvScale.domain([arg.start - sensitivity, arg.end + sensitivity]);
 
                                 var p1x = xscale(arg.end),
                                     p1y = 0,
@@ -321,10 +322,10 @@
                                     p2x = xscale(arg.start),
                                     p2y = 0,
 
-                                    p3x = gvScale(arg.start + sensitivity),
+                                    p3x = gvScale(arg.start),
                                     p3y = LABEL_PADDING + 2,
 
-                                    p4x = gvScale(arg.end - sensitivity),
+                                    p4x = gvScale(arg.end),
                                     p4y = LABEL_PADDING + 2;
 
                                 //console.log("[",p1x, p1y,"]","[", p2x, p2y ,"]", "[",p3x, p3y,"]", "[",p4x, p4y,"]");
