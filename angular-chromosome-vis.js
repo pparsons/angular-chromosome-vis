@@ -176,6 +176,13 @@
 				.attr({width: '100%'})
 				.attr({height: containerHeight});
 
+			var selectors = target.selectAll('.selector');
+
+			selectors.on('click', function() {
+				"use strict";
+				var a = 1;
+			});
+
 			dasLoader.loadModel(scope.chr, scope.assembly)
 				.features({segment: scope.chr}, function (res) {
 					//success response
@@ -449,7 +456,85 @@
 					brushEnd = ext[1];
 				});
 
-				//uncomment to use
+				var menu = [
+					{
+						title: 'Edit range',
+						action: function(elm, d, i) {
+
+							options.scope.activeSelector = self;
+							self.selected = !self.selected;
+							if (_selector.classed('selector')) {
+								_selector.classed('selector', false);
+								_selector.classed('selected', true);
+							}
+							else {
+								_selector.classed('selector', true);
+								_selector.classed('selected', false);
+							}
+							options.scope.$apply();
+
+							if (self.selected) {
+								options.scope.$broadcast("selector:activated", self);
+								//options.scope.$broadcast('selector:newLoc'); //will draw the geneview
+							}
+
+							//$state.go("user.genomeBrowser");
+							//$rootScope.page=3;
+							//$rootScope.$apply();
+						}
+					},
+					{
+						title: 'Fetch genes',
+						action: function(elm, d, i) {
+							options.scope.activeSelector = self;
+							self.selected = !self.selected;
+							if (_selector.classed('selector')) {
+								_selector.classed('selector', false);
+								_selector.classed('selected', true);
+							}
+							else {
+								_selector.classed('selector', true);
+								_selector.classed('selected', false);
+							}
+							options.scope.$apply();
+
+							if (self.selected) {
+								options.scope.$broadcast("selector:activated", self);
+								options.scope.$broadcast('selector:newLoc'); //will draw the geneview
+							}
+						}
+					},
+					{
+						title: 'Close',
+						action: function(elm, d, i) {
+							//placeholder for closing the menu
+						}
+					}
+				];
+
+
+				//self.brush.on("brushend", function() {
+				//	var a;
+				//	var ext = self.brush.extent();
+				//	var newStart = ext[0];
+				//	var newEnd = ext[1];
+				//
+				//	//if there was no movement--i.e., just a click
+				//	if (brushStart === newStart && brushEnd === newEnd) {
+				//		//if (typeof d3.event.sourceEvent !== 'undefined') {
+				//		//	d3.event = d3.event.sourceEvent;
+				//		//}
+				//			//d3.contextMenu(menu, true);
+				//	}
+				//	else {
+				//		var a;
+				//		//TODO only if geneview is already showing
+				//		options.scope.$broadcast('selector:newLoc'); //will redraw the geneview
+				//		//TODO don't show the menu
+				//	}
+				//
+				//});
+
 				self.brush.on("brushend", function () {
 					var ext = self.brush.extent();
 					var newStart = ext[0];
@@ -457,6 +542,10 @@
 
 					//if there was no movement--i.e., just a click
 					if (brushStart === newStart && brushEnd === newEnd) {
+
+						//d3.event = d3.event.sourceEvent;
+						//d3.contextMenu(menu);
+
 
 						options.scope.activeSelector = self;
 						self.selected = !self.selected;
@@ -501,6 +590,64 @@
 				_selector.select('.background').remove();
 				return self;
 			};
+
+			var menu = [
+				{
+					title: 'Edit range',
+					action: function(elm, d, i) {
+
+						options.scope.activeSelector = self;
+						self.selected = !self.selected;
+						if (_selector.classed('selector')) {
+							_selector.classed('selector', false);
+							_selector.classed('selected', true);
+						}
+						else {
+							_selector.classed('selector', true);
+							_selector.classed('selected', false);
+						}
+						options.scope.$apply();
+
+						if (self.selected) {
+							options.scope.$broadcast("selector:activated", self);
+							//options.scope.$broadcast('selector:newLoc'); //will draw the geneview
+						}
+
+						//$state.go("user.genomeBrowser");
+						//$rootScope.page=3;
+						//$rootScope.$apply();
+					}
+				},
+				{
+					title: 'Fetch genes',
+					action: function(elm, d, i) {
+						options.scope.activeSelector = self;
+						self.selected = !self.selected;
+						if (_selector.classed('selector')) {
+							_selector.classed('selector', false);
+							_selector.classed('selected', true);
+						}
+						else {
+							_selector.classed('selector', true);
+							_selector.classed('selected', false);
+						}
+						options.scope.$apply();
+
+						if (self.selected) {
+							options.scope.$broadcast("selector:activated", self);
+							options.scope.$broadcast('selector:newLoc'); //will draw the geneview
+						}
+					}
+				},
+				{
+					title: 'Close',
+					action: function(elm, d, i) {
+						//placeholder for closing the menu
+					}
+				}
+			];
+
+
 
 			this.move = function (to, from) {
 				self.brush.extent([to, from]);
